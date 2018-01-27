@@ -41,8 +41,8 @@ namespace Completed
 		private List <Vector3> gridPositions = new List <Vector3> ();
 
 		void InitializeSize (int difficulty) {
-			columns = Random.Range (6 + 2 * difficulty, 8 + 2 * difficulty);
-			rows = Random.Range (6 + 2 * difficulty, 8 + 2 * difficulty);
+			columns = 9;
+			rows = 8;
 			deskCount = new Count (5 + 2 * difficulty, 7 + 2 * difficulty);
 			classmateCount = new Count(3 + 2 * difficulty, 5 + 2 * difficulty);
 		}
@@ -61,8 +61,10 @@ namespace Completed
 			for (int x = -1; x < columns + 1; x++) {
 				for (int y = -1; y < columns + 1; y++) {
 					GameObject toInstantiate = floorTiles [Random.Range (0, floorTiles.Length)];
-					if (x == -1 || x == columns || y == -1 || y == rows) {
-					toInstantiate = outerWallTiles [Random.Range (0, outerWallTiles.Length)];
+					if (x == columns - 1 && y == rows) {
+						toInstantiate = exit;	
+					} else if (x == -1 || x == columns || y == -1 || y == rows) {
+						toInstantiate = outerWallTiles [Random.Range (0, outerWallTiles.Length)];
 					}
 					GameObject instance = Instantiate(toInstantiate, new Vector3 (x, y, 0f), Quaternion.identity) as GameObject;
 
@@ -101,7 +103,6 @@ namespace Completed
 
 			BoardSetup();
 			InitializeList();
-			Instantiate (exit, new Vector3(columns - 1, rows, 0f), Quaternion.identity);
 
 			LayoutObjectAtRandom (deskTiles, deskCount.minimum, deskCount.maximum);
 			LayoutObjectAtRandom (foodTiles, foodCount.minimum, foodCount.maximum);

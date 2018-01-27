@@ -166,13 +166,15 @@ namespace Completed
 		
 		//Restart reloads the scene when called.
 		private void Restart () {
+			if (teacherRage >= 25) {
+				cold -= 5;
+				hallPasses -= 1;
+				coldText.text = "-"+ 5 + " Cold level: " + cold;
+				GameManager.instance.messageForLevel = "You just got your nose wiped, mister! OUT!!!";
+			} else {
+				GameManager.instance.messageForLevel = "You got out before you got kicked out!";
+			}
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
-		}
-
-		private void UnfriendlyRestart () {
-			teacherRageText.text = "You just got your nose wiped, mister!!!";
-			cold -= 5;
-			SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
 
 		public void Sneeze () {
@@ -223,7 +225,7 @@ namespace Completed
 				//Call the GameOver function of GameManager.
 				GameManager.instance.GameOver ();
 			} else if (teacherRage >= teacherRageThreshold) {
-				Invoke ("UnfriendlyRestart", restartLevelDelay);
+				Invoke ("Restart", restartLevelDelay);
 			}
 		}
 	}

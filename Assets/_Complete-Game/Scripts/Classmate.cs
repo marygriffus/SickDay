@@ -7,7 +7,7 @@ namespace Completed
 
 	public class Classmate : MovingObject
 	{
-		public int playerDamage;
+		public bool isSick;
 		public AudioClip greetSound1;
 		public AudioClip greetSound2;
 		
@@ -55,13 +55,21 @@ namespace Completed
 		
 		//OnCantMove is called if Enemy attempts to move into a space occupied by a Player, it overrides the OnCantMove function of MovingObject 
 		//and takes a generic parameter T which we use to pass in the component we expect to encounter, in this case Player
-		protected override void OnCantMove <T> (T component)
-		{
+		protected override void OnCantMove <T> (T component) {
 			
 			//Set the attack trigger of animator to trigger Enemy attack animation.
 			animator.SetTrigger ("classmateGreet");
 
 			SoundManager.instance.RandomizeSfx (greetSound1, greetSound2);
+		}
+
+		public bool GetSick () {
+			if (!isSick) {
+				isSick = true;
+				return isSick;
+			} else {
+				return false;
+			}
 		}
 	}
 }

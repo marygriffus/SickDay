@@ -15,9 +15,10 @@ namespace Completed
 		public int hallPasses = 5;
 		public static GameManager instance = null;
 		[HideInInspector] public bool playersTurn = true;
-		
+		public string messageForLevel = "";
 		
 		private Text levelText;
+
 
 		private GameObject levelImage;
 		private BoardManager boardScript;
@@ -61,8 +62,7 @@ namespace Completed
 			levelImage = GameObject.Find("LevelImage");
 			levelText = GameObject.Find("LevelText").GetComponent<Text>();
 
-
-			levelText.text = "Classroom " + level;
+			levelText.text = messageForLevel + " Classroom " + level;
 
 			levelImage.SetActive(true);
 
@@ -95,7 +95,11 @@ namespace Completed
 		
 
 		public void GameOver () {
-			levelText.text = "After " + level + " classrooms, you ran out of Hall Passes. You are no God of Colds!";
+			if (playerColdPoints <= 0) {
+				levelText.text = "After " + level + " classrooms, you ran out sickness. You are no God of Colds!";
+			} else {
+				levelText.text = "After " + level + " classrooms, you ran out of Hall Passes. You are no God of Colds!";
+			}
 
 			levelImage.SetActive(true);
 

@@ -13,6 +13,7 @@ namespace Completed
 
 
 		void Awake () {
+			spriteRenderer = GetComponent<SpriteRenderer> ();
 		}
 
 
