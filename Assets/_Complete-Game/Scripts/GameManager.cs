@@ -18,6 +18,7 @@ namespace Completed
 		
 		
 		private Text levelText;
+
 		private GameObject levelImage;
 		private BoardManager boardScript;
 		private int level = 1;
@@ -57,14 +58,15 @@ namespace Completed
 		void InitGame() {
 			doingSetup = true;
 
-			//levelImage = GameObject.Find("LevelImage");
-			//levelText = GameObject.Find("LevelText").GetComponent<Text>();
+			levelImage = GameObject.Find("LevelImage");
+			levelText = GameObject.Find("LevelText").GetComponent<Text>();
 
-			//levelText.text = "Classroom " + level;
 
-			//levelImage.SetActive(true);
+			levelText.text = "Classroom " + level;
 
-			//Invoke("HideLevelImage", levelStartDelay);
+			levelImage.SetActive(true);
+
+			Invoke("HideLevelImage", levelStartDelay);
 
 			classmates.Clear();
 
@@ -93,9 +95,9 @@ namespace Completed
 		
 
 		public void GameOver () {
-			//levelText.text = "After " + level + " classrooms, you ran out of Hall Passes. You are no God of Colds!";
+			levelText.text = "After " + level + " classrooms, you ran out of Hall Passes. You are no God of Colds!";
 
-			//levelImage.SetActive(true);
+			levelImage.SetActive(true);
 
 			enabled = false;
 		}

@@ -7,6 +7,9 @@ namespace Completed
 	{
 		public AudioClip runSound1;
 		public AudioClip runSound2;
+		public Sprite dmgSprite;
+		private SpriteRenderer spriteRenderer;
+		public int hp;
 
 
 		void Awake () {
@@ -15,6 +18,13 @@ namespace Completed
 
 		public void RunIntoWall () {
 			SoundManager.instance.RandomizeSfx (runSound1, runSound2);
+
+			hp -= 1;
+
+			if (hp <= 0) {
+				spriteRenderer.sprite = dmgSprite;
+				gameObject.SetActive (false);
+			}
 		}
 	}
 }
