@@ -17,10 +17,10 @@ namespace Completed
 		}
 
 
-		public void RunIntoWall () {
+		public void RunIntoWall (int damage) {
 			SoundManager.instance.RandomizeSfx (runSound1, runSound2);
 
-			hp -= 1;
+			hp -= damage;
 
 			if (hp <= 0) {
 				spriteRenderer.sprite = dmgSprite;

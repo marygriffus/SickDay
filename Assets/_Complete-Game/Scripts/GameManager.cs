@@ -62,7 +62,11 @@ namespace Completed
 			levelImage = GameObject.Find("LevelImage");
 			levelText = GameObject.Find("LevelText").GetComponent<Text>();
 
-			levelText.text = messageForLevel + " Classroom " + level;
+			if (level == 1) {
+				levelText.text = "Classroom " + level;
+			} else {
+				levelText.text = messageForLevel + " Classroom " + level;
+			}
 
 			levelImage.SetActive(true);
 

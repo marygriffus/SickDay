@@ -8,9 +8,6 @@ namespace Completed
 	public class Classmate : MovingObject
 	{
 		public bool isSick;
-		public AudioClip greetSound1;
-		public AudioClip greetSound2;
-		
 		
 		private Animator animator;							//Variable of type Animator to store a reference to the enemy's Animator component.
 		private bool skipMove;								//Boolean to determine whether or not enemy should skip a turn or move this turn.
@@ -46,21 +43,17 @@ namespace Completed
 		
 
 		public void MoveClassmate () {
-			int xDir = Random.Range (-1, 1);
-			int yDir = Random.Range (-1, 1);
+			int xDir = (int)Random.Range (-1, 2);
+			int yDir = (int)Random.Range (-1, 2);
 			
-			AttemptMove <Player> (xDir, yDir);
+			AttemptMove <Wall> (xDir, yDir);
 		}
 		
-		
-		//OnCantMove is called if Enemy attempts to move into a space occupied by a Player, it overrides the OnCantMove function of MovingObject 
-		//and takes a generic parameter T which we use to pass in the component we expect to encounter, in this case Player
-		protected override void OnCantMove <T> (T component) {
-			
-			//Set the attack trigger of animator to trigger Enemy attack animation.
-			animator.SetTrigger ("classmateGreet");
 
-			SoundManager.instance.RandomizeSfx (greetSound1, greetSound2);
+		protected override void OnCantMove <T> (T component) {
+
+			Wall hitWall = component as Wall;
+			hitWall.RunIntoWall (0);
 		}
 
 		public bool GetSick () {

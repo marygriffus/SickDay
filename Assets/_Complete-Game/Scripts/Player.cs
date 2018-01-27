@@ -137,7 +137,7 @@ namespace Completed
 
 		protected override void OnCantMove <T> (T component) {
 			Wall hitWall = component as Wall;
-			hitWall.RunIntoWall ();
+			hitWall.RunIntoWall (2);
 		}
 		
 
