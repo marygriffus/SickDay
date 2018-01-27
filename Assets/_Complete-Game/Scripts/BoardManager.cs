@@ -43,8 +43,9 @@ namespace Completed
 		void InitializeSize (int difficulty) {
 			columns = 9;
 			rows = 8;
-			deskCount = new Count (5 + 2 * difficulty, 7 + 2 * difficulty);
-			classmateCount = new Count(3 + 2 * difficulty, 5 + 2 * difficulty);
+			foodCount = new Count (3 - difficulty, 5 - difficulty);
+			deskCount = new Count (3 + difficulty, 4 + difficulty);
+			classmateCount = new Count(2 + difficulty, 3 + difficulty);
 		}
 		
 		void InitializeList() {
