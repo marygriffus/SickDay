@@ -5,13 +5,12 @@ namespace Completed
 {
 	public class Sneeze : MonoBehaviour
 	{
-
 		public AudioClip sneezeSound;
 
 
 		protected void Start ()
 		{
-			Invoke ("Disappear", 1);
+			Invoke ("Disappear", 2);
 		}
 
 		protected void Disappear() {

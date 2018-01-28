@@ -54,12 +54,15 @@ namespace Completed
 		}
 
 		public void GetSick () {
-			isSick = true;
+			this.isSick = true;
 		}
 
 		private void OnTriggerEnter2D (Collider2D other)
 		{
-			GetSick ();
+			//Check if the tag of the trigger collided with is Exit.
+			if (other.tag == "Germs") {
+				GetSick ();
+			}
 		}
 	}
 }

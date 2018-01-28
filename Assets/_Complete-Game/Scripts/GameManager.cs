@@ -11,8 +11,11 @@ namespace Completed
 	{
 		public float levelStartDelay = 2f;
 		public float turnDelay = 0.01f;
+		public static int numberOfLevels = 10;
 		public int playerColdPoints = 50;
 		public int hallPasses = 5;
+		public int numberOfClassmates = 0;
+		public int numberOfInfections = 0;
 		public static GameManager instance = null;
 		[HideInInspector] public bool playersTurn = true;
 		public string messageForLevel = "";
@@ -49,11 +52,14 @@ namespace Completed
         }
 
         //This is called each time a scene is loaded.
-        static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
-        {
-            instance.level++;
-            instance.InitGame();
-        }
+        static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1) {
+			instance.level++;
+			if (instance.playerColdPoints > 0 && instance.hallPasses > 0) {
+				instance.InitGame ();
+			} else {
+				instance.GameOver ();
+			}
+		}
 
 
 		void InitGame() {
@@ -64,15 +70,39 @@ namespace Completed
 
 			if (level == 1) {
 				levelText.text = "Classroom " + level;
+			} else if (level == numberOfLevels) {
+				double percentageInfected = (float)numberOfClassmates / (float)numberOfInfections;
+				string noun = "Peon";
+				if (percentageInfected > 0.9) {
+					noun = "God";
+				} else if (percentageInfected > 0.8) {
+					noun = "King";
+				} else if (percentageInfected > 0.7) {
+					noun = "Duke";
+				} else if (percentageInfected > 0.6) {
+					noun = "Mayor";
+				} else if (percentageInfected > 0.5) {
+					noun = "Citizen";
+				} else if (percentageInfected > 0.3) {
+					noun = "Ratcatcher";
+				} else if (percentageInfected > 0.2) {
+					noun = "Rat";
+				} else if (percentageInfected > 0.1) {
+					noun = "Landowning Peasant";
+				}
+				levelText.text = "You completed all the levels! Congrats! You saw " + numberOfClassmates +
+					"classmates and infected " + numberOfInfections + " of them, making you a "
+					+ noun + " of Colds!";
+				levelStartDelay = 30;
 			} else {
 				levelText.text = messageForLevel + " Classroom " + level;
 			}
 
+			classmates.Clear();
+
 			levelImage.SetActive(true);
 
 			Invoke("HideLevelImage", levelStartDelay);
-
-			classmates.Clear();
 
 			boardScript.SetupScene(level);
 		}

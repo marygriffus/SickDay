@@ -134,7 +134,7 @@ namespace Completed
 				coldText.text = "-"+ 5 + " Cold level: " + cold;
 				GameManager.instance.messageForLevel = "You just got your nose wiped, mister! OUT!!!";
 			} else {
-				GameManager.instance.messageForLevel = "You got out before you got kicked out!";
+				GameManager.instance.messageForLevel = "You escaped before you got kicked out!";
 			}
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
@@ -167,6 +167,9 @@ namespace Completed
 		
 
 		private void CheckIfGameOver () {
+			GameManager.instance.playerColdPoints = cold;
+			GameManager.instance.hallPasses = hallPasses;
+
 			if (cold <= 0 || hallPasses <= 0) {
 				SoundManager.instance.PlaySingle (gameOverSound);
 				
