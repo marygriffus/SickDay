@@ -48,7 +48,6 @@ namespace Completed
 		
 
 		protected override void OnCantMove <T> (T component) {
-
 			Wall hitWall = component as Wall;
 			hitWall.RunIntoWall (0);
 		}
@@ -57,9 +56,7 @@ namespace Completed
 			this.isSick = true;
 		}
 
-		private void OnTriggerEnter2D (Collider2D other)
-		{
-			//Check if the tag of the trigger collided with is Exit.
+		private void OnTriggerEnter2D (Collider2D other) {
 			if (other.tag == "Germs") {
 				GetSick ();
 			}

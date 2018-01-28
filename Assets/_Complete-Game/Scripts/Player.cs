@@ -90,16 +90,16 @@ namespace Completed
 				SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
 			}
 
-			CheckIfGameOver ();
-
 			GameManager.instance.playersTurn = false;
 			noAction = true;
+			CheckIfGameOver ();
 		}
 		
 
 		protected override void OnCantMove <T> (T component) {
 			Wall hitWall = component as Wall;
-			hitWall.RunIntoWall (2);
+			teacherRage += 3;
+			hitWall.RunIntoWall (5);
 		}
 		
 
@@ -147,8 +147,8 @@ namespace Completed
 			teacherRage += 2;
 			coldText.text = "-"+ 5 + " Cold level: " + cold;
 			teacherRageText.text = "-"+ 2 + " Teacher Rage level: " + teacherRage;
-			CheckIfGameOver ();
 			noAction = true;
+			CheckIfGameOver ();
 		
 		}
 
@@ -167,10 +167,9 @@ namespace Completed
 		
 
 		private void CheckIfGameOver () {
-			GameManager.instance.playerColdPoints = cold;
-			GameManager.instance.hallPasses = hallPasses;
 
 			if (cold <= 0 || hallPasses <= 0) {
+
 				SoundManager.instance.PlaySingle (gameOverSound);
 				
 				//Stop the background music.
