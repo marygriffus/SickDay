@@ -54,11 +54,8 @@ namespace Completed
         //This is called each time a scene is loaded.
         static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1) {
 			instance.level++;
-			if (instance.playerColdPoints > 0 && instance.hallPasses > 0) {
-				instance.InitGame ();
-			} else {
-				instance.GameOver ();
-			}
+			instance.InitGame ();
+
 		}
 
 
