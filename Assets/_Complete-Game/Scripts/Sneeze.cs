@@ -11,20 +11,12 @@ namespace Completed
 
 		protected void Start ()
 		{
-
+			Invoke ("Disappear", 1);
 		}
 
-
-		public void Hit (int xDir, int yDir)
-		{
-
+		protected void Disappear() {
+			gameObject.SetActive (false);
 		}
 
-
-		protected void AttemptHit (int xDir, int yDir) {
-
-			SoundManager.instance.PlaySingle (sneezeSound);
-			Hit (xDir, yDir);
-		}
 	}
 }

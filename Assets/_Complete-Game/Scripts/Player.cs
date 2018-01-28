@@ -19,17 +19,13 @@ namespace Completed
 		public AudioClip eatSound1;
 		public AudioClip eatSound2;
 		public AudioClip gameOverSound;
-		GameObject sneezeTile;
-		GameObject spitball;
-		GameObject lick;
+		public GameObject sneezeTile;
+		bool noAction = true;
 		
 		private Animator animator;
 		private int cold;
 		private int hallPasses;
 		private int teacherRage;
-#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
-        private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
-#endif
 		
 
 		protected override void Start () {
@@ -60,9 +56,11 @@ namespace Completed
 			int horizontal = 0;
 			int vertical = 0;
 
-//			bool lick = (Input.GetKeyDown("f"));
-			bool sneezing = (Input.GetKeyDown("g"));
-//			bool spitball = (Input.GetKeyDown("h"));
+			if (Input.GetKeyDown ("g") && noAction) {
+				noAction = false;
+				AttemptSneeze ();
+			}
+
 			horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
 			vertical = (int) (Input.GetAxisRaw ("Vertical"));
 
@@ -70,16 +68,10 @@ namespace Completed
 				vertical = 0;
 			}
 
-			if ((!sneezeTile && !spitball && !lick) && (horizontal != 0 || vertical != 0)) {
+			if ((horizontal != 0 || vertical != 0) && noAction) {
+				noAction = false;
 				AttemptMove<Wall> (horizontal, vertical);
-//			} else if (lick) {
-//				AttemptLick(horizontal, vertical);
-			} else if (sneezing) {
-				AttemptSneeze(horizontal, vertical);
 			}
-//			} else if (spitball) {
-//				AttemptSpitball(horizontal, vertical);
-//			}
 		}
 			
 		protected override void AttemptMove <T> (int xDir, int yDir)
@@ -101,6 +93,7 @@ namespace Completed
 			CheckIfGameOver ();
 
 			GameManager.instance.playersTurn = false;
+			noAction = true;
 		}
 		
 
@@ -146,52 +139,35 @@ namespace Completed
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
 
-		public void AttemptSneeze (int x, int y) {
+		public void AttemptSneeze () {
 
-			GenerateSneeze (x, y);
+			GenerateSneeze ();
 			animator.SetTrigger ("playerSneeze");
 			cold -= 5;
 			teacherRage += 2;
 			coldText.text = "-"+ 5 + " Cold level: " + cold;
 			teacherRageText.text = "-"+ 2 + " Teacher Rage level: " + teacherRage;
 			CheckIfGameOver ();
+			noAction = true;
 		
 		}
 
-		public void GenerateSneeze(int x, int y) {
+		public void GenerateSneeze() {
 			Vector2 start = transform.position;
-			Instantiate(sneezeTile, new Vector3 (start.x + x, start.y + y, 0f), Quaternion.identity);
+			Instantiate(sneezeTile, new Vector3 (start.x, start.y - 1, 0f), Quaternion.identity);
+			Instantiate(sneezeTile, new Vector3 (start.x, start.y, 0f), Quaternion.identity);
+			Instantiate(sneezeTile, new Vector3 (start.x, start.y + 1, 0f), Quaternion.identity);
+			Instantiate(sneezeTile, new Vector3 (start.x + 1, start.y - 1, 0f), Quaternion.identity);
+			Instantiate(sneezeTile, new Vector3 (start.x + 1, start.y, 0f), Quaternion.identity);
+			Instantiate(sneezeTile, new Vector3 (start.x + 1, start.y + 1, 0f), Quaternion.identity);
+			Instantiate(sneezeTile, new Vector3 (start.x - 1, start.y - 1, 0f), Quaternion.identity);
+			Instantiate(sneezeTile, new Vector3 (start.x - 1, start.y, 0f), Quaternion.identity);
+			Instantiate(sneezeTile, new Vector3 (start.x - 1, start.y + 1, 0f), Quaternion.identity);
 		}
+		
 
-//		public void AttemptLick (int x, int y) {
-//
-//			animator.SetTrigger ("playerLick");
-//			cold -= 1;
-//			teacherRage += 5;
-//			coldText.text = "-"+ 1 + " Cold level: " + cold;
-//			teacherRageText.text = "-"+ 5 + " Teacher Rage level: " + teacherRage;
-//			CheckIfGameOver ();
-//
-//		}
-//
-//		public void AttemptSpitball (int x, int y) {
-//
-//			animator.SetTrigger ("playerSpitball");
-//			cold -= 3;
-//			teacherRage += 2;
-//			coldText.text = "-"+ 3 + " Cold level: " + cold;
-//			teacherRageText.text = "-"+ 2 + " Teacher Rage level: " + teacherRage;
-//			CheckIfGameOver ();
-//
-//		}
-		
-		
-		//CheckIfGameOver checks if the player is out of food points and if so, ends the game.
-		private void CheckIfGameOver ()
-		{
-			//Check if food point total is less than or equal to zero.
+		private void CheckIfGameOver () {
 			if (cold <= 0 || hallPasses <= 0) {
-				//Call the PlaySingle function of SoundManager and pass it the gameOverSound as the audio clip to play.
 				SoundManager.instance.PlaySingle (gameOverSound);
 				
 				//Stop the background music.
