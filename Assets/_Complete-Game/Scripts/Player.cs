@@ -19,6 +19,9 @@ namespace Completed
 		public AudioClip eatSound1;
 		public AudioClip eatSound2;
 		public AudioClip gameOverSound;
+		GameObject sneezeTile;
+		GameObject spitball;
+		GameObject lick;
 		
 		private Animator animator;
 		private int cold;
@@ -56,61 +59,27 @@ namespace Completed
 			
 			int horizontal = 0;
 			int vertical = 0;
-			
-			//Check if we are running either in the Unity editor or in a standalone build.
-#if UNITY_STANDALONE || UNITY_WEBPLAYER
 
+//			bool lick = (Input.GetKeyDown("f"));
+			bool sneezing = (Input.GetKeyDown("g"));
+//			bool spitball = (Input.GetKeyDown("h"));
 			horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
 			vertical = (int) (Input.GetAxisRaw ("Vertical"));
 
 			if(horizontal != 0) {
 				vertical = 0;
 			}
-			//Check if we are running on iOS, Android, Windows Phone 8 or Unity iPhone
-#elif UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
 
-			if (Input.touchCount > 0)
-			{
-				//Store the first touch detected.
-				Touch myTouch = Input.touches[0];
-				
-				//Check if the phase of that touch equals Began
-				if (myTouch.phase == TouchPhase.Began)
-				{
-					//If so, set touchOrigin to the position of that touch
-					touchOrigin = myTouch.position;
-				}
-				
-				//If the touch phase is not Began, and instead is equal to Ended and the x of touchOrigin is greater or equal to zero:
-				else if (myTouch.phase == TouchPhase.Ended && touchOrigin.x >= 0)
-				{
-					//Set touchEnd to equal the position of this touch
-					Vector2 touchEnd = myTouch.position;
-					
-					//Calculate the difference between the beginning and end of the touch on the x axis.
-					float x = touchEnd.x - touchOrigin.x;
-					
-					//Calculate the difference between the beginning and end of the touch on the y axis.
-					float y = touchEnd.y - touchOrigin.y;
-					
-					//Set touchOrigin.x to -1 so that our else if statement will evaluate false and not repeat immediately.
-					touchOrigin.x = -1;
-					
-					//Check if the difference along the x axis is greater than the difference along the y axis.
-					if (Mathf.Abs(x) > Mathf.Abs(y))
-						//If x is greater than zero, set horizontal to 1, otherwise set it to -1
-						horizontal = x > 0 ? 1 : -1;
-					else
-						//If y is greater than zero, set horizontal to 1, otherwise set it to -1
-						vertical = y > 0 ? 1 : -1;
-				}
-			}
-			
-#endif //End of mobile platform dependendent compilation section started above with #elif
-			//Check if we have a non-zero value for horizontal or vertical
-			if (horizontal != 0 || vertical != 0) {
+			if ((!sneezeTile && !spitball && !lick) && (horizontal != 0 || vertical != 0)) {
 				AttemptMove<Wall> (horizontal, vertical);
+//			} else if (lick) {
+//				AttemptLick(horizontal, vertical);
+			} else if (sneezing) {
+				AttemptSneeze(horizontal, vertical);
 			}
+//			} else if (spitball) {
+//				AttemptSpitball(horizontal, vertical);
+//			}
 		}
 			
 		protected override void AttemptMove <T> (int xDir, int yDir)
@@ -177,8 +146,9 @@ namespace Completed
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 		}
 
-		public void Sneeze () {
+		public void AttemptSneeze (int x, int y) {
 
+			GenerateSneeze (x, y);
 			animator.SetTrigger ("playerSneeze");
 			cold -= 5;
 			teacherRage += 2;
@@ -188,27 +158,32 @@ namespace Completed
 		
 		}
 
-		public void Lick () {
-
-			animator.SetTrigger ("playerLick");
-			cold -= 1;
-			teacherRage += 5;
-			coldText.text = "-"+ 1 + " Cold level: " + cold;
-			teacherRageText.text = "-"+ 5 + " Teacher Rage level: " + teacherRage;
-			CheckIfGameOver ();
-
+		public void GenerateSneeze(int x, int y) {
+			Vector2 start = transform.position;
+			Instantiate(sneezeTile, new Vector3 (start.x + x, start.y + y, 0f), Quaternion.identity);
 		}
 
-		public void Spitball () {
-
-			animator.SetTrigger ("playerSpitball");
-			cold -= 3;
-			teacherRage += 2;
-			coldText.text = "-"+ 3 + " Cold level: " + cold;
-			teacherRageText.text = "-"+ 2 + " Teacher Rage level: " + teacherRage;
-			CheckIfGameOver ();
-
-		}
+//		public void AttemptLick (int x, int y) {
+//
+//			animator.SetTrigger ("playerLick");
+//			cold -= 1;
+//			teacherRage += 5;
+//			coldText.text = "-"+ 1 + " Cold level: " + cold;
+//			teacherRageText.text = "-"+ 5 + " Teacher Rage level: " + teacherRage;
+//			CheckIfGameOver ();
+//
+//		}
+//
+//		public void AttemptSpitball (int x, int y) {
+//
+//			animator.SetTrigger ("playerSpitball");
+//			cold -= 3;
+//			teacherRage += 2;
+//			coldText.text = "-"+ 3 + " Cold level: " + cold;
+//			teacherRageText.text = "-"+ 2 + " Teacher Rage level: " + teacherRage;
+//			CheckIfGameOver ();
+//
+//		}
 		
 		
 		//CheckIfGameOver checks if the player is out of food points and if so, ends the game.
@@ -230,4 +205,3 @@ namespace Completed
 		}
 	}
 }
-

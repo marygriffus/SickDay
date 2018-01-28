@@ -13,8 +13,7 @@ namespace Completed
 		private bool skipMove;								//Boolean to determine whether or not enemy should skip a turn or move this turn.
 		
 
-		protected override void Start ()
-		{ 
+		protected override void Start () { 
 
 			GameManager.instance.AddClassmateToList (this);
 			
@@ -24,10 +23,8 @@ namespace Completed
 			//Call the start function of our base class MovingObject.
 			base.Start ();
 		}
-		
 
-		protected override void AttemptMove <T> (int xDir, int yDir)
-		{
+		protected override void AttemptMove <T> (int xDir, int yDir) {
 			//Check if skipMove is true, if so set it to false and skip this turn.
 			if (skipMove) {
 				skipMove = false;
@@ -56,12 +53,15 @@ namespace Completed
 			hitWall.RunIntoWall (0);
 		}
 
-		public bool GetSick () {
-			if (!isSick) {
-				isSick = true;
-				return isSick;
-			} else {
-				return false;
+		public void GetSick () {
+			isSick = true;
+		}
+
+		private void OnTriggerEnter2D (Collider2D other)
+		{
+			//Check if the tag of the trigger collided with is Exit.
+			if (other.tag == "Germs") {
+				GetSick ();
 			}
 		}
 	}
