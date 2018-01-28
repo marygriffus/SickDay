@@ -10,7 +10,7 @@ namespace Completed
 	public class GameManager : MonoBehaviour
 	{
 		public float levelStartDelay = 2f;
-		public float turnDelay = 0.1f;
+		public float turnDelay = 0.01f;
 		public int playerColdPoints = 50;
 		public int hallPasses = 5;
 		public static GameManager instance = null;
